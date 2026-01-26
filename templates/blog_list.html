@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="px-8 py-10 max-w-7xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-6">Yoga Blogs</h1>
+
+  <p class="text-gray-600 mb-6">
+    Learn concepts, techniques, and traditions in yoga practice.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    {% for blog in blogs %}
+
+    <a href="/blog/{{ blog.slug }}"
+       class="shadow bg-white rounded-2xl hover:shadow-xl transition block">
+
+      <div class="p-5">
+        <h3 class="font-semibold mb-2">{{ blog.title }}</h3>
+        <p class="text-gray-600 text-sm">{{ blog.summary }}</p>
+
+        <span class="text-green-700 text-sm mt-2 block">
+          Read More →
+        </span>
+      </div>
+
+    </a>
+
+    {% endfor %}
+
+  </div>
+
+</section>
+
+{% endblock %}

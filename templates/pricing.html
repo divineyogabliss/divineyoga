@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="px-8 py-10 max-w-6xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-6">Pricing Plans</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <div class="bg-white shadow rounded-2xl p-6">
+      <h3 class="font-semibold text-xl mb-2">Monthly Yoga Pass</h3>
+      <p class="text-2xl font-bold mb-3">₹1999</p>
+      <ul class="text-gray-600 text-sm mb-4">
+        <li>✔ Daily Morning Class</li>
+        <li>✔ Recordings Access</li>
+        <li>✔ Member Support</li>
+      </ul>
+      <a href="https://forms.gle/YOUR_MONTHLY_PASS_FORM"
+         class="bg-green-600 text-white px-6 py-2 rounded-lg inline-block">
+        Enroll Now
+      </a>
+    </div>
+
+    <div class="bg-white shadow rounded-2xl p-6">
+      <h3 class="font-semibold text-xl mb-2">10-Class Pack</h3>
+      <p class="text-2xl font-bold mb-3">₹999</p>
+      <ul class="text-gray-600 text-sm mb-4">
+        <li>✔ Flexible Usage</li>
+        <li>✔ Mix Any Classes</li>
+        <li>✔ Lifetime Validity</li>
+      </ul>
+      <a href="https://forms.gle/YOUR_CLASS_PACK_FORM"
+         class="bg-green-600 text-white px-6 py-2 rounded-lg inline-block">
+        Enroll Now
+      </a>
+    </div>
+
+    <div class="bg-white shadow rounded-2xl p-6">
+      <h3 class="font-semibold text-xl mb-2">Workshop Access</h3>
+      <p class="text-2xl font-bold mb-3">₹499</p>
+      <ul class="text-gray-600 text-sm mb-4">
+        <li>✔ Special Topics</li>
+        <li>✔ Live + Recordings</li>
+        <li>✔ Bonus PDFs</li>
+      </ul>
+      <a href="https://forms.gle/YOUR_WORKSHOP_FORM"
+         class="bg-green-600 text-white px-6 py-2 rounded-lg inline-block">
+        Join Workshop
+      </a>
+    </div>
+
+  </div>
+
+</section>
+
+{% endblock %}

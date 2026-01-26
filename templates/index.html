@@ -1,0 +1,596 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+.aura-section-green{
+  background:
+    url('/static/bg/leaf-aura.png') no-repeat center / cover,
+    #f7faf8;
+    radial-gradient(circle at 10% 20%, rgba(34,197,94,.18), transparent 40%),
+    radial-gradient(circle at 90% 30%, rgba(99,102,241,.18), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(236,72,153,.18), transparent 45%),
+    linear-gradient(120deg,#f0fdf4,#ecfeff,#fdf4ff);
+  backdrop-filter: blur(14px);
+    background:linear-gradient(90deg,#22c55e,#14b8a6,#8b5cf6);
+
+}
+.card-soft {
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.06),
+    0 0 40px rgba(255,255,255,.6) inset;
+  border: 1px solid rgba(255,255,255,.6);
+  backdrop-filter: blur(4px);
+}
+
+
+#suggestionsBox{
+  max-height: 260px;
+  overflow-y: auto;
+  border-radius: 14px;
+}
+
+.suggestion-item{
+  padding:10px 10px;
+  cursor:pointer;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.suggestion-item:last-child{
+  border-bottom: none;
+}
+
+.suggestion-item strong{
+  text-transform: capitalize;
+}
+
+.suggestion-item:hover{
+  background:#e7f6ec;
+}
+
+.suggestion-item.active{
+  background:#16a34a;
+  color:white;
+}
+
+.suggestion-item.active span{
+  color:white;
+}
+.aura-bg{
+  background: radial-gradient(
+      1200px 500px at -10% -10%,
+      #c7f5d9 0%,
+      transparent 60%
+
+  ),
+  radial-gradient(
+      900px 500px at 110% 0%,
+      #e6d7ff 0%,
+      transparent 60%
+  ),
+  radial-gradient(
+      900px 600px at 50% 120%,
+      #ffecd2 0%,
+      transparent 60%
+  ),
+  #f7faf8;
+  radial-gradient(circle at 10% 20%, rgba(34,197,94,.18), transparent 40%),
+    radial-gradient(circle at 90% 30%, rgba(99,102,241,.18), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(236,72,153,.18), transparent 45%),
+    linear-gradient(120deg,#f0fdf4,#ecfeff,#fdf4ff);
+  backdrop-filter: blur(14px);
+}
+.aura-section-green{
+  background: radial-gradient(
+      800px 300px at 10% 10%,
+      #dfffe8 0%,
+      transparent 60%
+  );
+}
+.aura-section-purple{
+  background: radial-gradient(
+      800px 300px at 10% 10%,
+      rgba(190,160,255,0.6),
+      transparent 60%
+  );
+}
+
+.hero-glow {
+  box-shadow:
+    0 20px 60px rgba(255,180,255,.35),
+    0 0 40px rgba(255,255,255,.6);
+}
+</style>
+
+<div class="pb-20 aura-bg">
+
+
+<!-- ================= HERO ================= -->
+<section class="hero-aura px-6 py-10">
+
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[1.4fr_2fr_1.4fr] gap-8 items-center">
+
+    <!-- LEFT VISUAL -->
+    <div class="hidden md:flex justify-center float-slow">
+      <img src="/static/bg/asanasanim.png"
+           class="w-full max-w-md rounded-3xl shadow-2xl opacity-95 hero-glow"/>
+    </div>
+
+
+    <!-- CENTER SEARCH -->
+    <div class="text-center">
+
+      <h1 class="text-4xl font-bold mb-3">
+        Welcome to Your Yoga Journey
+      </h1>
+
+      <p class="text-gray-600 mb-6">
+        Learn • Heal • Transform with guided programs
+      </p>
+
+      <div id="searchWrapper" class="relative w-full max-w-md mx-auto">
+        <!-- Search Icon -->
+  <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+    🔍
+  </span>
+        <input id="courseSearch"
+               type="text"
+               placeholder="Search Asanas, 21 Days, 45 Days…"
+               class="w-full pl-12 pr-5 py-3 rounded-xl border shadow
+                focus:ring-2 focus:ring-green-300 focus:outline-none" />
+
+        <div id="suggestionsBox"
+             class="hidden absolute mt-2 w-full bg-white border rounded-xl shadow-lg z-20"></div>
+
+      </div>
+    </div>
+    <!-- RIGHT VISUAL -->
+    <div class="hidden md:flex justify-center float-slow2">
+      <img src="/static/bg/pranayamasanim.gif"
+           class="w-full max-w-md rounded-3xl shadow-2xl opacity-95 hero-glow"/>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= DURATION FILTER ================= -->
+<section class="px-8 mt-6 max-w-7xl mx-auto">
+
+  <h3 class="text-2xl font-bold">Yoga Courses by Duration</h3>
+  <br>
+  <div id="durationFilters" class="flex gap-3 flex-wrap text-center">
+
+    {% for d in [
+      "3 Days","5 Days","11 Days","21 Days","30 Days",
+      "45 Days","60 Days","120 Days","6 Months","1 Year"
+    ] %}
+    <button class="px-4 py-2 rounded-xl border text-sm
+                   hover:bg-green-50 hover:border-green-500 durationChip aura-section-green">
+      {{ d }}
+    </button>
+    {% endfor %}
+
+  </div>
+</center>
+</section>
+
+
+
+
+<!-- ================= COURSES SLIDER ================= -->
+<section class="px-8 py-10 max-w-7xl mx-auto">
+
+  <div class="flex justify-between items-center mb-3">
+<!--    <h2 class="text-2xl font-bold">Yoga Courses</h2>-->
+
+    <a href="/courses"
+       class="text-xl text-gray-600 hover:text-green-700">
+      View all →
+    </a>
+  </div>
+
+  <div class="relative">
+
+    <button id="courseLeft"
+      class="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2
+             bg-white shadow rounded-full w-10 h-10 items-center justify-center">←</button>
+
+    <div id="courseSlider"
+         class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 no-scrollbar">
+
+      {% for c in courses %}
+      <div class="min-w-[320px] snap-start rounded-2xl shadow bg-white p-6 courseCard aura-section-purple"
+           data-title="{{ c.title | lower }}"
+           data-duration="{{ c.duration | lower }}">
+
+        <h3 class="text-xl font-semibold">{{ c.title }}</h3>
+        <p class="text-lg font-bold mt-1">₹{{ c.price }}</p>
+
+        <p class="text-sm text-gray-600 mb-2">
+          ⏳ {{ c.duration }}
+        </p>
+
+        <ul class="text-gray-600 text-sm mb-4">
+          {% for f in c.features %}
+          <li>✔ {{ f }}</li>
+          {% endfor %}
+        </ul>
+
+        <a href="/course/{{ c.slug }}"
+           class="viewBtn bg-green-600 text-white px-6 py-2 rounded-lg inline-block">
+           View Course →
+        </a>
+
+      </div>
+      {% endfor %}
+
+    </div>
+
+    <button id="courseRight"
+      class="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2
+             bg-white shadow rounded-full w-10 h-10 items-center justify-center">→</button>
+
+  </div>
+
+</section>
+
+<!-- ================= CATEGORY SLIDER ================= -->
+<section class="px-8 pt-4 max-w-7xl mx-auto">
+
+  <div class="flex justify-between items-center mb-3">
+    <h2 class="text-2xl font-bold">Course Collections</h2>
+
+    <a href="/categories"
+       class="text-xl text-gray-600 hover:text-green-700">
+      View all →
+    </a>
+  </div>
+
+
+  <div class="relative">
+
+
+    <!-- LEFT -->
+    <button id="catLeft"
+      class="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2
+             bg-white shadow rounded-full w-10 h-10 items-center justify-center">
+      ←
+    </button>
+
+
+    <div id="catSlider"
+         class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 no-scrollbar">
+
+
+      {% for item in [
+
+        {"slug":"mudras","title":"Mudras",
+         "grad":"from-orange-200 to-orange-50",
+         "icon":"/static/icons/mudras.png",
+         "filter":"mudras",
+         "desc":"Hand gestures for energy & healing"},
+
+        {"slug":"pranayamas","title":"Pranayamas",
+         "grad":"from-blue-200 to-blue-50",
+         "icon":"/static/icons/pranayamas.png",
+         "filter":"pranayamas",
+         "desc":"Breathing exercises for vitality"},
+
+        {"slug":"asanas","title":"Asanas",
+         "grad":"from-green-200 to-green-50",
+         "icon":"/static/icons/asanas.png",
+         "filter":"asanas",
+         "desc":"Postures for strength & flexibility"},
+
+        {"slug":"meditation","title":"Meditation",
+         "grad":"from-purple-200 to-purple-50",
+         "icon":"/static/icons/meditation.png",
+         "filter":"meditation",
+         "desc":"Practices for mindfulness"},
+
+        {"slug":"chakras","title":"Chakras",
+         "grad":"from-pink-200 to-pink-50",
+         "icon":"/static/icons/chakras.png",
+         "filter":"chakras",
+         "desc":"Energy centers & inner balance"},
+
+        {"slug":"bandhas","title":"Bandhas",
+         "grad":"from-teal-200 to-teal-50",
+         "icon":"/static/icons/bandas.png",
+         "filter":"bandhas",
+         "desc":"Internal locks for prana control"}
+
+      ] %}
+
+
+
+      <!-- CATEGORY CARD -->
+      <a href="/category/{{ item.slug }}"
+         class="min-w-[230px] max-w-[230px] snap-start
+                rounded-2xl shadow-sm hover:shadow-xl
+                hover:-translate-y-1 transition
+                bg-gradient-to-b {{ item.grad }}
+                border border-white/60 activeCard">
+
+
+        <!-- ICON BUBBLE -->
+        <div class="w-16 h-16 mx-auto mt-5 mb-3
+                    rounded-full bg-white/70
+                    backdrop-blur-sm border
+                    flex items-center justify-center">
+
+          <img src="{{ item.icon }}"
+               class="w-9 h-9 opacity-80" />
+        </div>
+
+
+        <!-- TEXT -->
+        <div class="px-4 pb-5 text-center">
+
+          <h3 class="text-lg font-semibold">
+            {{ item.title }}
+          </h3>
+
+          <p class="text-gray-700 text-xs leading-tight">
+            {{ item.desc }}
+          </p>
+
+        </div>
+
+      </a>
+
+      {% endfor %}
+
+    </div>
+
+
+    <!-- RIGHT -->
+    <button id="catRight"
+      class="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2
+             bg-white shadow rounded-full w-10 h-10 items-center justify-center">
+      →
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<!-- ================= BLOGS =================
+<section class="px-8 max-w-7xl mx-auto">
+
+  <h2 class="text-2xl font-bold mb-4">Latest Blog Posts</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    {% for b in [
+      {"title":"Benefits of Pranayama for Daily Health","img":"https://images.pexels.com/photos/3822622/pexels-photo-3822622.jpeg"},
+      {"title":"How Mudras Improve Energy Flow","img":"https://images.pexels.com/photos/3822621/pexels-photo-3822621.jpeg"},
+      {"title":"Understanding Chakras & Balance","img":"https://images.pexels.com/photos/3823050/pexels-photo-3823050.jpeg"}
+    ] %}
+
+    <a href="#" class="rounded-2xl shadow bg-white hover:shadow-xl transition block">
+      <img src="{{ b.img }}" class="w-full h-44 object-cover rounded-t-2xl" />
+      <div class="p-4">
+        <h4 class="font-semibold">{{ b.title }}</h4>
+        <span class="text-green-700 text-sm">Read More →</span>
+      </div>
+    </a>
+
+    {% endfor %}
+
+  </div>
+
+</section>
+-->
+
+
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="px-8 py-12 max-w-6xl mx-auto">
+
+  <h2 class="text-2xl font-bold mb-6 text-center">
+    What Our Students Say
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    {% for t in [
+      "The meditation course brought so much clarity to my mind.",
+      "I improved flexibility and posture in just 7 days.",
+      "Mudras helped me reduce stress and improve focus."
+    ] %}
+
+    <div class="bg-white rounded-2xl shadow p-5 text-center aura-bg">
+      ⭐⭐⭐⭐⭐
+      <p class="text-gray-700 mt-2">{{ t }}</p>
+    </div>
+
+    {% endfor %}
+
+  </div>
+
+</section>
+
+
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="px-8 py-10 bg-white border-t mt-10 aura-bg">
+
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <div>
+      <h3 class="font-bold mb-2">Divine Yoga Bliss</h3>
+      <p class="text-gray-600 text-bold text-1xl">Learn • Heal • Transform</p>
+    </div>
+
+    <p class="text-gray-600 text-sm text-bold text-2xl">
+      📞 WhatsApp: +91 73823 07452
+    </p>
+
+    <p class="text-gray-600 text-bold text-1xl">
+      💚 Made with love for your spiritual journey
+    </p>
+
+  </div>
+
+</footer>
+
+
+
+
+<!-- ================= SCRIPT ================= -->
+<script>
+
+
+const slider = document.getElementById("catSlider");
+const left = document.getElementById("catLeft");
+const right = document.getElementById("catRight");
+const scrollAmount = 240;
+
+left.onclick = () => slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+right.onclick = () => slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
+
+function toggleArrows() {
+
+  if (window.innerWidth >= 768) {
+    left.style.display = "flex";
+    right.style.display = "flex";
+    return;
+  }
+
+  left.style.display = slider.scrollLeft > 5 ? "flex" : "none";
+
+  right.style.display =
+    slider.scrollWidth - slider.clientWidth - slider.scrollLeft > 5
+      ? "flex"
+      : "none";
+}
+
+slider.addEventListener("scroll", toggleArrows);
+window.addEventListener("resize", toggleArrows);
+window.addEventListener("load", toggleArrows);
+toggleArrows();
+
+// -------- map duration → matching course --------
+const durationMap = {};
+
+document.querySelectorAll(".courseCard").forEach(card => {
+  const d = card.dataset.duration;
+  const link = card.querySelector(".viewBtn").href;
+  if (!durationMap[d]) durationMap[d] = link;
+});
+
+document.querySelectorAll(".durationChip").forEach(btn => {
+  btn.addEventListener("click", () => {
+
+    document.querySelectorAll(".durationChip")
+      .forEach(b=>b.classList.remove("bg-green-600","text-white"));
+
+    btn.classList.add("bg-green-600","text-white");
+
+    const key = btn.innerText.trim().toLowerCase();
+    const url = durationMap[key];
+
+    if (url) window.location.href = url;
+    else alert("No course available for this duration yet");
+  });
+});
+
+
+
+// ---------- SEARCH ----------
+
+const searchInput     = document.getElementById("courseSearch");
+const searchWrapper   = document.getElementById("searchWrapper");
+const suggestionsBox  = document.getElementById("suggestionsBox");
+
+function getCourses(){
+  return Array.from(document.querySelectorAll(".courseCard")).map(card => ({
+    title: card.dataset.title,
+    duration: card.dataset.duration,
+    link: card.querySelector(".viewBtn").href,
+    element: card
+  }));
+}
+
+function showSuggestions(matches){
+
+  if (!matches.length){
+    suggestionsBox.innerHTML =
+      `<div class="suggestion-item text-gray-500 px-3 py-2">
+         No results found
+       </div>`;
+    suggestionsBox.classList.remove("hidden");
+    return;
+  }
+
+  suggestionsBox.innerHTML = matches.map(m => `
+    <div class="suggestion-item px-3 py-2 cursor-pointer hover:bg-green-50"
+         data-link="${m.link}">
+      <strong>${m.title}</strong>
+      <span class="text-gray-500 text-sm"> — ${m.duration}</span>
+    </div>
+  `).join("");
+
+  suggestionsBox.classList.remove("hidden");
+
+  // highlight + navigate
+  document.querySelectorAll(".suggestion-item")
+    .forEach(item => {
+
+      item.onclick = () => {
+
+        document.querySelectorAll(".suggestion-item")
+          .forEach(x => x.classList.remove("bg-green-100"));
+
+        item.classList.add("bg-green-100");
+
+        suggestionsBox.classList.add("hidden");
+
+        setTimeout(() =>
+          window.location.href = item.dataset.link,
+        120);
+      };
+    });
+}
+
+
+// live search
+searchInput?.addEventListener("input", e => {
+
+  const term = e.target.value.toLowerCase();
+  const courses = getCourses();
+
+  const matches = courses.filter(c =>
+    c.title.includes(term) ||
+    c.duration.includes(term)
+  );
+
+  showSuggestions(matches);
+
+  // fade non-matching
+  courses.forEach(c => {
+    c.element.style.opacity =
+      matches.includes(c) ? "1" : "0.35";
+  });
+});
+
+
+//
+// ---------- CLICK OUTSIDE → CLOSE DROPDOWN ----------
+document.addEventListener("click", e => {
+
+  if (suggestionsBox.classList.contains("hidden")) return;
+
+  if (searchWrapper.contains(e.target)) return;
+
+  suggestionsBox.classList.add("hidden");
+});
+
+</script>
+
+</div>
+
+{% endblock %}

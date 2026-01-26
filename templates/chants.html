@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="px-8 py-10 max-w-7xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-4">
+    Sacred Chants & Mantras
+  </h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    {% for c in chants %}
+    <a href="/chant/{{ c.slug }}"
+       class="bg-white rounded-xl shadow p-5 hover:shadow-xl transition block">
+
+      <h3 class="text-lg font-semibold">
+        {{ c.title }}
+      </h3>
+
+      <p class="text-gray-600 text-sm mt-1">
+        🕉 {{ c.deity }}
+      </p>
+
+      {% if c.benefits %}
+      <p class="text-green-700 text-xs mt-2">
+        ✦ {{ c.benefits }}
+      </p>
+      {% endif %}
+
+    </a>
+    {% endfor %}
+
+  </div>
+
+</section>
+
+{% endblock %}

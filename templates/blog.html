@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="px-8 py-10 max-w-4xl mx-auto">
+
+  <a href="/blogs" class="text-gray-600 text-sm mb-4 inline-block">
+    ← Back to Blogs
+  </a>
+
+  <h1 class="text-4xl font-bold mb-2">{{ blog.title }}</h1>
+
+  <div class="text-gray-500 text-sm mb-6">
+    {{ blog.date }} •
+    <a href="/category/{{ blog.category }}" class="text-green-700">
+      {{ blog.category | capitalize }}
+    </a>
+  </div>
+
+  <article class="prose prose-lg max-w-none">
+    {{ blog.content | safe }}
+  </article>
+
+
+  <div class="mt-10 p-6 rounded-2xl shadow bg-white">
+    <h3 class="text-xl font-semibold mb-2">
+      Continue your journey in {{ blog.category | capitalize }}
+    </h3>
+
+    <div class="flex gap-3 flex-wrap">
+      <a href="/category/{{ blog.category }}"
+         class="bg-green-600 text-white px-5 py-2 rounded-lg">
+        Explore Category →
+      </a>
+
+      {% if enroll %}
+      <a href="{{ enroll.form_url }}"
+         class="border px-5 py-2 rounded-lg">
+        Enroll in {{ enroll.course_name }}
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+</section>
+
+{% endblock %}

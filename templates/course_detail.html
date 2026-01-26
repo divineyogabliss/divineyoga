@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .aura-header{
+  background:
+    radial-gradient(circle at 10% 20%, rgba(34,107,194,.18), transparent 40%),
+    radial-gradient(circle at 90% 30%, rgba(99,102,241,.18), transparent 45%),
+    linear-gradient(120deg,#f0fdf4,#ecfeff,#fdf4ff);
+}
+  padding-top: 10px;
+  .aura-section-green{
+  background: radial-gradient(
+      800px 300px at 10% 10%,
+      #f3ecff,
+      transparent 60%
+  );
+}
+</style>
+<section class="px-8 py-10 max-w-6xl mx-auto">
+
+  <!-- Header -->
+  <h1 class="text-3xl font-bold mb-2">
+    {{ course.title }}
+  </h1>
+
+  <p class="text-gray-600 mb-4">
+    {{ course.short_desc }}
+  </p>
+
+  <div class="flex flex-wrap gap-3 text-sm mb-6">
+    <span class="px-3 py-1 rounded-full bg-green-100 text-green-700">
+      ⏳ {{ course.duration }}
+    </span>
+
+    <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700">
+      💻 Live Online Sessions
+    </span>
+
+    <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-700">
+      📄 PDF Material Included
+    </span>
+  </div>
+
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- LEFT -->
+    <article class="lg:col-span-2 bg-white shadow rounded-2xl p-6 aura-header">
+
+      <h3 class="text-xl font-semibold mb-3">
+        What you will learn
+      </h3>
+
+      <ul class="list-disc ml-6 text-gray-700 space-y-1 mb-6">
+        {% for p in course.outcomes %}
+        <li>{{ p }}</li>
+        {% endfor %}
+      </ul>
+
+
+      <h3 class="text-xl font-semibold mb-3">
+        Suitable For Beginners and yoga Enthusiasts
+      </h3>
+
+      <ul class="list-disc ml-6 text-gray-700 space-y-1 mb-6">
+        {% for s in course.suits %}
+        <li>{{ s }}</li>
+        {% endfor %}
+      </ul>
+
+
+      <h3 class="text-xl font-semibold mb-3">
+        Important Practice Notes
+      </h3>
+
+      <p class="text-gray-600">
+        Please practice within your comfort range and inform the instructor
+        if you experience pain, discomfort, dizziness, or breathlessness.
+      </p>
+
+    </article>
+
+
+
+    <!-- RIGHT — ENROLL CARD -->
+    <aside class="bg-white shadow-lg border rounded-2xl p-6 h-fit sticky top-24 aura-header">
+
+      <p class="text-2xl font-bold mb-1">
+        ₹{{ course.price }}
+      </p>
+
+      <p class="text-gray-600 text-sm mb-4">
+        Access for {{ course.duration }}
+      </p>
+
+      <a href="{{ course.form_url }}"
+         target="_blank"
+         class="block text-center bg-green-600 hover:bg-green-700 text-white
+                px-6 py-3 rounded-lg font-medium transition">
+        Enroll Now →
+      </a>
+
+      <p class="text-xs text-gray-500 mt-3">
+        You will be redirected to enrollment form
+        to submit health details & payment confirmation.
+      </p>
+
+    </aside>
+
+  </div>
+
+</section>
+
+{% endblock %}

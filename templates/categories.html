@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="px-8 py-10 max-w-7xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-6">All Collections</h1>
+
+  <p class="text-gray-600 mb-8">
+    Explore topics and dive deeper into yoga learning paths.
+  </p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
+    {% for key, cat in categories.items() %}
+
+    <a href="/category/{{ key }}"
+       class="bg-white rounded-2xl p-5 shadow hover:shadow-xl
+              hover:-translate-y-1 transition">
+
+      <img src="{{ cat.image }}"
+           class="w-full h-36 rounded-lg object-cover mb-3" />
+
+      <h3 class="text-lg font-semibold">{{ cat.title }}</h3>
+
+      <p class="text-gray-600 text-sm">
+        {{ cat.description }}
+      </p>
+
+      <span class="text-green-700 font-medium block mt-2">
+        Explore →
+      </span>
+
+    </a>
+
+    {% endfor %}
+
+  </div>
+
+</section>
+
+{% endblock %}

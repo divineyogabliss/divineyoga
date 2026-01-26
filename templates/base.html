@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>{{ page_title or "Divine Yoga Bliss — Learn • Heal • Transform" }}</title>
+
+<meta name="description"
+      content="{{ page_desc or 'Authentic Yoga • Mudras • Pranayama • Meditation • Chakras • Bandhas — Live guided learning & structured programs' }}" />
+
+<meta property="og:title" content="{{ page_title or 'Divine Yoga Bliss' }}">
+<meta property="og:description" content="{{ page_desc or 'Yoga • Healing • Mindfulness' }}">
+<meta property="og:type" content="website">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto; }
+
+/* ===== Divine Aura Header ===== */
+.aura-header{
+  background:
+    radial-gradient(circle at 10% 20%, rgba(34,197,94,.18), transparent 40%),
+    radial-gradient(circle at 90% 30%, rgba(99,102,241,.18), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(236,72,153,.18), transparent 45%),
+    linear-gradient(120deg,#f0fdf4,#ecfeff,#fdf4ff);
+  backdrop-filter: blur(14px);
+}
+
+/* glowing nav */
+.nav-link{
+  position: relative;
+  padding: 6px 4px;
+  transition: all .25s ease;
+}
+
+.nav-link::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-6px;
+  width:100%;
+  height:3px;
+  background:linear-gradient(90deg,#22c55e,#14b8a6,#8b5cf6);
+  border-radius:99px;
+  transform:scaleX(0);
+  transition:.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-active::after{
+  transform:scaleX(1);
+}
+
+.nav-active{
+  color:#16a34a;
+  font-weight:600;
+  text-shadow:0 0 18px rgba(34,197,94,.45);
+}
+
+/* chants pill */
+.chants-pill{
+  background:linear-gradient(135deg,#dcfce7,#ecfeff);
+  padding:6px 14px;
+  border-radius:999px;
+  box-shadow:0 0 30px rgba(34,197,94,.25);
+}
+</style>
+</head>
+
+<body class="bg-white text-gray-800">
+
+<!-- ================= HEADER ================= -->
+<header class="w-full sticky top-0 z-40 aura-header border-b border-white/40">
+
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <!-- LOGO -->
+    <div class="flex items-center gap-3">
+      <img src="/static/bg/logo.png"
+           class="w-10 h-10 rounded-full object-cover" />
+      <span class="text-xl font-semibold tracking-wide text-gray-800">
+        Divine Yoga Bliss
+      </span>
+    </div>
+
+    <!-- NAV -->
+    <nav class="hidden md:flex gap-10 text-[15px] font-medium items-center">
+
+      <a href="/" class="nav-link {% if request.url.path == '/' %}nav-active{% endif %}">
+        Home
+      </a>
+
+      <!-- CHANTS -->
+      <div class="relative">
+        <button id="chantsBtn"
+                class="nav-link chants-pill flex items-center gap-1
+                {% if 'chants' in request.url.path %}nav-active{% endif %}">
+          Chants ▾
+        </button>
+
+        <div id="chantsMenu"
+             class="absolute left-0 mt-3 w-72 bg-white shadow-xl rounded-2xl
+                    border p-4 opacity-0 pointer-events-none transition-all">
+
+          <h4 class="text-sm font-semibold text-gray-700 mb-3">
+            ✨ Sacred Chant Collections
+          </h4>
+
+          <a href="/chants" class="block px-3 py-2 rounded-lg hover:bg-green-50">
+            🔱 All Chants
+          </a>
+
+          <a href="/chants?cat=hanuman" class="block px-3 py-2 rounded-lg hover:bg-green-50">
+            🙏 Hanuman Chants
+            <span class="block text-xs text-gray-500">Chalisa • Ashtakam</span>
+          </a>
+
+          <a href="/chants?cat=vedic" class="block px-3 py-2 rounded-lg hover:bg-green-50">
+            🕉 Vedic Mantras
+            <span class="block text-xs text-gray-500">Gayatri • Mahamrityunjaya</span>
+          </a>
+
+          <a href="/chants?cat=devi" class="block px-3 py-2 rounded-lg hover:bg-green-50">
+            🌺 Devi Chants
+            <span class="block text-xs text-gray-500">Lalitha • Durga</span>
+          </a>
+
+        </div>
+      </div>
+
+       <a href="/courses"
+         class="nav-link {% if 'courses' in request.url.path %}nav-active{% endif %}">
+        Courses
+      </a>
+
+      <a href="/workshops"
+         class="nav-link {% if 'workshops' in request.url.path %}nav-active{% endif %}">
+        Workshops
+      </a>
+
+    </nav>
+
+    <!-- CTA -->
+    <div class="hidden md:flex gap-3">
+      <a href="/contact"
+         class="px-4 py-2 rounded-lg border border-white/50 bg-white/60 hover:bg-white">
+        Contact
+      </a>
+
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSd11WJ4JyL2Di0tAsWY4ryfUtIUlwsaC_7DqfWcCH18xbBAYA/viewform"
+         class="px-4 py-2 rounded-lg bg-green-600 text-white shadow-xl shadow-green-300">
+        Enroll Now
+      </a>
+    </div>
+
+  </div>
+</header>
+
+<!-- ================= PAGE CONTENT ================= -->
+<main class="min-h-screen">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ================= WHATSAPP CTA ================= -->
+<a href="https://wa.me/917382307452?text=Hi%20Joshna,%20I%20am%20interested%20in%20your%20Yoga%20Programs."
+   class="fixed bottom-6 right-6 px-5 py-3 rounded-full shadow-lg
+          bg-green-600 text-white font-medium hover:bg-green-700">
+ 💬 Chat on WhatsApp
+</a>
+
+<!-- DROPDOWN SCRIPT -->
+<script>
+const chantsBtn = document.getElementById("chantsBtn");
+const chantsMenu = document.getElementById("chantsMenu");
+
+chantsBtn.addEventListener("mouseenter", () => {
+  chantsMenu.style.opacity = "1";
+  chantsMenu.style.pointerEvents = "auto";
+});
+
+chantsBtn.addEventListener("mouseleave", () => {
+  setTimeout(() => {
+    if (!chantsMenu.matches(":hover")) {
+      chantsMenu.style.opacity = "0";
+      chantsMenu.style.pointerEvents = "none";
+    }
+  }, 150);
+});
+
+chantsMenu.addEventListener("mouseleave", () => {
+  chantsMenu.style.opacity = "0";
+  chantsMenu.style.pointerEvents = "none";
+});
+</script>
+
+</body>
+</html>

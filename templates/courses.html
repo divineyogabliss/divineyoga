@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* Soft divine background */
+.courses-bg {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(190,170,255,0.35), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(160,230,200,0.35), transparent 60%),
+    linear-gradient(135deg, #f6f2ff, #eefbf5);
+  min-height: 100vh;
+  padding-top: 0px;
+}
+
+/* Glass card effect */
+.courseCard {
+  background: rgba(255,255,255,0.85) !important;
+  backdrop-filter: blur(8px);
+  box-shadow:
+    0 12px 30px rgba(120,100,180,.15),
+    0 0 40px rgba(200,255,220,.4) inset;
+  border: 1px solid rgba(255,255,255,.6);
+  transition: .4s ease;
+}
+.aura-bg{
+  background: radial-gradient(
+      1200px 500px at -10% -10%,
+      #c7f5d9 0%,
+      transparent 60%
+
+  ),
+  radial-gradient(
+      900px 500px at 110% 0%,
+      #e6d7ff 0%,
+      transparent 60%
+  ),
+  radial-gradient(
+      900px 600px at 50% 120%,
+      #ffecd2 0%,
+      transparent 60%
+  ),
+  #f7faf8;
+  radial-gradient(circle at 10% 20%, rgba(34,197,94,.18), transparent 40%),
+    radial-gradient(circle at 90% 30%, rgba(99,102,241,.18), transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(236,72,153,.18), transparent 45%),
+    linear-gradient(120deg,#f0fdf4,#ecfeff,#fdf4ff);
+  backdrop-filter: blur(14px);
+}
+.courseCard:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow:
+    0 20px 50px rgba(140,120,255,.3),
+    0 0 60px rgba(170,255,210,.6) inset;
+}
+
+/* Search glow */
+#courseSearch {
+  border-radius: 14px;
+  border: 1px solid rgba(140,120,255,.4);
+  box-shadow: 0 0 20px rgba(160,140,255,.25);
+  transition: .3s;
+}
+
+#courseSearch:focus {
+  outline: none;
+  box-shadow: 0 0 30px rgba(160,255,210,.6);
+  border-color: #9adbb8;
+}
+
+/* Headline glow */
+.courses-title {
+  background: linear-gradient(to right,#8e7cff,#6ccca3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(160,130,255,.3);
+}
+
+.aura-section-purple{
+  background: radial-gradient(
+      800px 300px at 10% 10%,
+      rgba(190,160,255,0.6),
+      transparent 60%
+  );
+}
+</style>
+
+<section class="courses-bg">
+
+  <section class="px-8 py-10 max-w-6xl mx-auto">
+
+    <h1 class="text-3xl font-bold mb-4 courses-title">Yoga Courses</h1>
+
+    <!-- SEARCH BAR -->
+    <input id="courseSearch"
+           type="text"
+           placeholder="Search duration ex: 3 days..."
+           class="w-full md:w-96 px-4 py-2 mb-8 shadow-sm bg-white" />
+
+    <div id="courseGrid aura-bg"
+         class="grid grid-cols-1 md:grid-cols-3 gap-8 aura-section-purple">
+
+      {% for c in courses %}
+      <div class="courseCard rounded-2xl p-6 aura-section-purple"
+           data-title="{{ c.title|lower }}"
+           data-duration="{{ c.duration|lower }}"
+           data-features="{{ ' '.join(c.features)|lower }}">
+
+        <h3 class="text-lg font-semibold">{{ c.title }}</h3>
+
+        <p class="font-bold mt-1">₹{{ c.price }}</p>
+
+        <p class="text-sm text-gray-600 mb-2">
+          ⏳ {{ c.duration }}
+        </p>
+
+        <ul class="text-sm text-gray-600 mb-4">
+          {% for f in c.features %}
+          <li>✔ {{ f }}</li>
+          {% endfor %}
+        </ul>
+
+        <a href="/course/{{ c.slug }}"
+           class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-xl inline-block shadow-md">
+          View Course →
+        </a>
+
+      </div>
+      {% endfor %}
+
+    </div>
+
+  </section>
+</section>
+
+<!-- SEARCH FILTER SCRIPT (unchanged) -->
+<script>
+const searchInput = document.getElementById("courseSearch");
+const cards = document.querySelectorAll(".courseCard");
+
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.toLowerCase();
+
+  cards.forEach(card => {
+    const text =
+      card.dataset.title + " " +
+      card.dataset.duration + " " +
+      card.dataset.features;
+
+    card.style.display = text.includes(q) ? "" : "none";
+  });
+});
+</script>
+
+{% endblock %}
