@@ -1,4 +1,7 @@
-fastapi
+fastapi~=0.125.0
 uvicorn
 jinja2
 python-multipart
+
+PyYAML~=6.0.3
+Markdown~=3.10

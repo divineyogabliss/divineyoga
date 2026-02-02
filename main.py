@@ -1,9 +1,9 @@
+import os
+
+import yaml
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import os
-import yaml
-import markdown
 
 app = FastAPI()
 
@@ -11,6 +11,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 BLOGS_DIR = "blogs"
+form_url="https://docs.google.com/forms/d/e/1FAIpQLSd11WJ4JyL2Di0tAsWY4ryfUtIUlwsaC_7DqfWcCH18xbBAYA/viewform?usp=dialog"
 
 # =========================
 # CATEGORY META
@@ -53,7 +54,6 @@ CATEGORY_DATA = {
 # -----------------------------
 # CATEGORY → GOOGLE FORM ENROLL LINKS
 # -----------------------------
-form_url="https://docs.google.com/forms/d/e/1FAIpQLSd11WJ4JyL2Di0tAsWY4ryfUtIUlwsaC_7DqfWcCH18xbBAYA/viewform?usp=dialog"
 CATEGORY_FORMS = {
     "mudras": {"course_name": "Mudras Course", "form_url": form_url},
     "pranayamas": {"course_name": "Pranayama Course", "form_url":form_url},
