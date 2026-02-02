@@ -10,12 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
+      - name: Checkout repository
+        uses: actions/divineyoga
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Add EC2 host to known_hosts
+        run: |
+          ssh-keyscan -H 16.171.31.2 >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        run: |
+          ssh -i ~/.ssh/id_rsa ec2-user@16.171.31.2 "echo SSH_CONNECTED"
+
+      - name: Deploy application
+        run: |
+          ssh -i ~/.ssh/id_rsa ec2-user@16.171.31.2 << 'EOF'
+            set -e
             cd /home/ec2-user/apps/divineyoga
             ./deploy.sh
+          EOF
