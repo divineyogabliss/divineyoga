@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to EC2 (Fully Automated)
 
 on:
   push:
@@ -23,10 +23,38 @@ jobs:
         run: |
           ssh-keyscan -H 16.171.31.2 >> ~/.ssh/known_hosts
 
-      - name: Test SSH connection
+      - name: Deploy on EC2
         run: |
-          ssh -i ~/.ssh/id_rsa ec2-user@16.171.31.2 "echo SSH_CONNECTED"
+          ssh -i ~/.ssh/id_rsa ec2-user@16.171.31.2 << 'EOF'
+            set -e
 
-      - name: Deploy application
-        run: |
-          ssh -i ~/.ssh/id_rsa ec2-user@16.171.31.2 "bash /home/ec2-user/deploy.sh"
+            APP_DIR="/home/ec2-user/apps/divineyoga"
+            REPO_URL="https://github.com/divineyogabliss/divineyoga.git"
+
+            echo "🚀 Deploying DivineYoga..."
+
+            mkdir -p /home/ec2-user/apps
+
+            if [ ! -d "$APP_DIR/.git" ]; then
+              echo "📦 Cloning repo..."
+              git clone "$REPO_URL" "$APP_DIR"
+            fi
+
+            cd "$APP_DIR"
+
+            git fetch origin
+            git reset --hard origin/main
+
+            docker build -t divineyoga .
+
+            docker stop divineyoga || true
+            docker rm divineyoga || true
+
+            docker run -d \
+              --name divineyoga \
+              -p 8000:8000 \
+              --restart unless-stopped \
+              divineyoga
+
+            echo "✅ Deployment complete"
+          EOF
