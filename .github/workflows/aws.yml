@@ -23,11 +23,32 @@ jobs:
         run: |
           ssh-keyscan -H 16.171.31.2 >> ~/.ssh/known_hosts
 
-      - name: Deploy on EC2
+      - name: Deploy on EC2 (fully automated)
         run: |
           ssh -i ~/.ssh/id_rsa ec2-user@16.171.31.2 << 'EOF'
             set -e
 
+            echo "🔍 Checking system dependencies..."
+
+            # ---------- GIT ----------
+            if ! command -v git >/dev/null 2>&1; then
+              echo "📦 Installing git..."
+              sudo dnf install -y git
+            fi
+
+            # ---------- DOCKER ----------
+            if ! command -v docker >/dev/null 2>&1; then
+              echo "🐳 Installing docker..."
+              sudo dnf install -y docker
+              sudo systemctl enable docker
+              sudo systemctl start docker
+              sudo usermod -aG docker ec2-user
+            fi
+
+            # ---------- Ensure docker is running ----------
+            sudo systemctl start docker
+
+            # ---------- DEPLOY APP ----------
             APP_DIR="/home/ec2-user/apps/divineyoga"
             REPO_URL="https://github.com/divineyogabliss/divineyoga.git"
 
@@ -36,7 +57,7 @@ jobs:
             mkdir -p /home/ec2-user/apps
 
             if [ ! -d "$APP_DIR/.git" ]; then
-              echo "📦 Cloning repo..."
+              echo "📦 Cloning repository..."
               git clone "$REPO_URL" "$APP_DIR"
             fi
 
@@ -56,5 +77,5 @@ jobs:
               --restart unless-stopped \
               divineyoga
 
-            echo "✅ Deployment complete"
+            echo "✅ Deployment completed successfully"
           EOF
