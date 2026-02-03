@@ -42,7 +42,6 @@ jobs:
               sudo dnf install -y docker
               sudo systemctl enable docker
               sudo systemctl start docker
-              sudo usermod -aG docker ec2-user
             fi
 
             # ---------- Ensure docker is running ----------
@@ -66,12 +65,12 @@ jobs:
             git fetch origin
             git reset --hard origin/main
 
-            docker build -t divineyoga .
+            sudo docker build -t divineyoga .
 
-            docker stop divineyoga || true
-            docker rm divineyoga || true
+            sudo docker stop divineyoga || true
+            sudo docker rm divineyoga || true
 
-            docker run -d \
+            sudo docker run -d \
               --name divineyoga \
               -p 8000:8000 \
               --restart unless-stopped \
