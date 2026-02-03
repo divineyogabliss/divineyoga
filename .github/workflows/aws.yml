@@ -29,8 +29,4 @@ jobs:
 
       - name: Deploy application
         run: |
-          ssh -i ~/.ssh/id_rsa ec2-user@16.171.31.2 << 'EOF'
-            set -e
-            cd /home/ec2-user/apps/divineyoga
-            ./deploy.sh
-          EOF
+          ssh -i ~/.ssh/id_rsa ec2-user@16.171.31.2 "bash /home/ec2-user/deploy.sh"
