@@ -1,4 +1,4 @@
-title: Hanuman Chalisa
+title: Vedic
 deity: Lord Hanuman
 origin: Awadhi
 language: Sanskrit / Hindi

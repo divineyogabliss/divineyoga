@@ -11,7 +11,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 BLOGS_DIR = "blogs"
-form_url="https://docs.google.com/forms/d/e/1FAIpQLSd11WJ4JyL2Di0tAsWY4ryfUtIUlwsaC_7DqfWcCH18xbBAYA/viewform?usp=dialog"
+form_url = "https://docs.google.com/forms/d/e/1FAIpQLSd11WJ4JyL2Di0tAsWY4ryfUtIUlwsaC_7DqfWcCH18xbBAYA/viewform?usp=dialog"
 
 # =========================
 # CATEGORY META
@@ -50,20 +50,19 @@ CATEGORY_DATA = {
     },
 }
 
-
 # -----------------------------
 # CATEGORY → GOOGLE FORM ENROLL LINKS
 # -----------------------------
 CATEGORY_FORMS = {
     "mudras": {"course_name": "Mudras Course", "form_url": form_url},
-    "pranayamas": {"course_name": "Pranayama Course", "form_url":form_url},
+    "pranayamas": {"course_name": "Pranayama Course", "form_url": form_url},
     "asanas": {"course_name": "Asanas Course", "form_url": form_url},
     "meditation": {"course_name": "Meditation Program", "form_url": form_url},
     "chakras": {"course_name": "Chakra Healing Workshop", "form_url": form_url},
     "bandhas": {"course_name": "Bandhas Training", "form_url": form_url},
 }
 
-CATEGORY_COURSES =[
+CATEGORY_COURSES = [
     {
         "id": "asanas_7",
         "title": "7-Day Asanas Course",
@@ -215,6 +214,7 @@ COURSES = [
 CHANTS_DIR = "chants"
 import markdown
 
+
 def load_blogs_for_category(category: str):
     blogs = []
     path = os.path.join(BLOGS_DIR, category)
@@ -243,9 +243,6 @@ def load_blogs_for_category(category: str):
         })
 
     return blogs
-
-
-
 
 
 def load_chants():
@@ -288,39 +285,6 @@ def load_chants():
     return chants
 
 
-
-def load_chant_by_slug(slug: str):
-    for category in os.listdir(CHANTS_DIR):
-
-        filepath = os.path.join(CHANTS_DIR, category, f"{slug}.md")
-
-        if not os.path.exists(filepath):
-            continue
-
-        with open(filepath, "r", encoding="utf-8") as f:
-            content = f.read()
-
-        try:
-            meta, body = content.split("\n\n", 1)
-            meta_yaml = yaml.safe_load(meta)
-        except Exception:
-            return None
-
-        html_body = markdown.markdown(body, extensions=["extra"])
-
-        return {
-            "title": meta_yaml.get("title", "Untitled Chant"),
-            "deity": meta_yaml.get("deity", ""),
-            "origin": meta_yaml.get("origin", ""),
-            "language": meta_yaml.get("language", ""),
-            "benefits": meta_yaml.get("benefits", ""),
-            "duration": meta_yaml.get("duration", ""),
-            "category": category,
-            "content": html_body,
-        }
-
-    return None
-
 def load_blog_by_slug(slug: str):
     for category in CATEGORY_DATA.keys():
         path = os.path.join(BLOGS_DIR, category, f"{slug}.md")
@@ -346,8 +310,10 @@ def load_blog_by_slug(slug: str):
 
     return None
 
+
 def get_course(slug):
     return next((c for c in COURSES if c["slug"] == slug), None)
+
 
 def load_all_blogs():
     all_items = []
@@ -434,13 +400,6 @@ def course_detail(slug: str, request: Request):
         "course": course
     })
 
-@app.get("/chants")
-def chant_list(request: Request):
-    chants = load_chants()
-    return templates.TemplateResponse("chants.html", {
-        "request": request,
-        "chants": chants
-    })
 
 @app.get("/blogs")
 def blog_list(request: Request):
@@ -463,9 +422,11 @@ def categories(request: Request):
         }
     )
 
+
 @app.get("/contact")
 def contact(request: Request):
     return templates.TemplateResponse("contact.html", {"request": request})
+
 
 @app.get("/blog/{slug}")
 def blog_page(slug: str, request: Request):
@@ -485,8 +446,30 @@ def blog_page(slug: str, request: Request):
             "enroll": enroll,
         }
     )
-@app.get("/chant/{slug}")
-def chant_page(slug: str, request: Request):
+
+@app.get("/chants")
+def chant_categories(request: Request, cat: str = None):
+
+    chants = load_chants()
+
+    # filter by category if provided
+    if cat:
+        chants = [c for c in chants if c.get("category") == cat]
+
+    # extract unique categories
+    categories = sorted(list(set(c["category"] for c in load_chants())))
+
+    return templates.TemplateResponse("chants.html", {
+        "request": request,
+        "chants": chants,
+        "categories": categories,
+        "selected_category": cat
+    })
+
+
+
+@app.get("/chants/{slug}")
+def chant_detail(slug: str, request: Request):
 
     chant = load_chant_by_slug(slug)
 
@@ -497,6 +480,50 @@ def chant_page(slug: str, request: Request):
         "request": request,
         "chant": chant
     })
+
+
+def load_chant_by_slug(slug: str):
+
+    for category in os.listdir(CHANTS_DIR):
+
+        category_path = os.path.join(CHANTS_DIR, category)
+
+        if os.path.isdir(category_path):
+
+            filepath = os.path.join(category_path, f"{slug}.md")
+
+            if os.path.exists(filepath):
+
+                with open(filepath, "r", encoding="utf-8") as f:
+                    content = f.read()
+
+                try:
+                    meta, body = content.split("\n\n", 1)
+                    meta_yaml = yaml.safe_load(meta) or {}
+                except Exception as e:
+                    print("YAML error:", e)
+                    return None
+
+                html_body = markdown.markdown(body, extensions=["extra"])
+
+                return {
+                    "slug": slug,
+                    "category": category,
+                    "title": meta_yaml.get("title", "Untitled Chant"),
+                    "deity": meta_yaml.get("deity", ""),
+                    "origin": meta_yaml.get("origin", ""),
+                    "language": meta_yaml.get("language", ""),
+                    "benefits": meta_yaml.get("benefits", ""),
+                    "duration": meta_yaml.get("duration", ""),
+
+                    # 🔥 IMPORTANT ADDITION
+                    "lines": meta_yaml.get("lines", []),
+
+                    "content": html_body,
+                }
+
+    print("Chant not found")
+    return None
 
 
 @app.get("/blogs")
@@ -520,9 +547,10 @@ def categories(request: Request):
         }
     )
 
+
 @app.get("/workshops")
 def workshops(request: Request):
-    return templates.TemplateResponse("workshops.html",{"request":request})
+    return templates.TemplateResponse("workshops.html", {"request": request})
 
 
 @app.get("/payment")
